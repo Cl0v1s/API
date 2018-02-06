@@ -181,9 +181,10 @@ class APIController extends Controller
         $f = $c->getMethod("Patch");
         $params = array();
         foreach ($f->getParameters() as $param) {
-            if(isset($data[$param->name]) == false)
+            if(isset($data[$param->name]) == false && $param->isOptional() == false)
                 throw new Exception("Les arguments fournis sont incorrects (".$param->name.")", Errors::$BAD_ARGUMENTS);
-            array_push($params,$data[$param->name]);
+            if(isset($data[$param->name])) 
+                array_push($params,$data[$param->name]);
         }
         $manager::Patch($id, ...$params);
     }
